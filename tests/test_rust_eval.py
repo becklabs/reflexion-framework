@@ -1,4 +1,4 @@
-from evaluation.local.rust import LocalRustTestingEnv
+from reflexion.evaluation.local.rust import LocalRustTestingEnv
 
 env = LocalRustTestingEnv(timeout=1000)
 
