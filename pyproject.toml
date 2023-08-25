@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "reflexion"
+version = "0.1"
+description = "A simple, modular implementation of Reflexion for code generation"
+authors = ["Beck LaBash <becklabash@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/becklabs/reflexion-codegen"
+
+[tool.poetry.dependencies]
+python = "^3.9"  
+leetcode_env = { path = "./leetcode-hard-gym", develop = true }
+evaluate = "0.4.0"
+datasets = "2.14.4"
+python-dotenv = "1.0.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.8"]
+build-backend = "poetry.core.masonry.api"

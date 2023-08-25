@@ -1,3 +1,5 @@
+# ADAPTED FROM https://huggingface.co/spaces/Muennighoff/code_eval_octopack/blob/main/execute.py 
+
 import os
 from typing import Any, List
 from .base import LocalTestingEnv
