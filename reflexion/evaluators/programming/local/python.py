@@ -3,7 +3,7 @@
 import os
 from typing import Any, List
 from .base import LocalTestingEnv
-from typing import Callable, Any
+from typing import Any
 import ast
 from queue import Queue
 from .util import time_limit, TimeoutException

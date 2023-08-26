@@ -32,6 +32,12 @@ def load_yaml_file(filepath: str) -> List[Dict]:
 def parse_conversation(raw_messages: List[Dict]) -> List[BaseMessage]:
     """
     Parse a chat thread JSON object into a list of Messages.
+
+    Args:
+        raw_messages (List[Dict]): A list of messages in JSON format.
+    
+    Returns:
+        List[BaseMessage]: A list of Messages.
     """
     message_roles  = {
         "user": HumanMessage,
@@ -49,7 +55,8 @@ def parse_conversation(raw_messages: List[Dict]) -> List[BaseMessage]:
 def get_buffer_string(
     messages: Sequence[BaseMessage], human_prefix: str = "Input", ai_prefix: str = "Output"
 ) -> str:
-    """Convert sequence of Messages to strings and concatenate them into one string.
+    """
+    Convert sequence of Messages to strings and concatenate them into one string.
 
     Args:
         messages: Messages to be converted to strings.
@@ -58,18 +65,6 @@ def get_buffer_string(
 
     Returns:
         A single string concatenation of all input messages.
-
-    Example:
-        .. code-block:: python
-
-            from langchain.schema import AIMessage, HumanMessage
-
-            messages = [
-                HumanMessage(content="Hi, how are you?"),
-                AIMessage(content="Good, how are you?"),
-            ]
-            get_buffer_string(messages)
-            # -> "Human: Hi, how are you?\nAI: Good, how are you?"
     """
     role_to_color = {
         "System": "red",
