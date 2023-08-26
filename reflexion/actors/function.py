@@ -44,7 +44,7 @@ class LanguageFunction:
         return response.content
 
     @classmethod
-    def from_yaml(cls, filepath: str) -> LanguageFunction:
+    def from_yaml(cls, filepath: str, llm: ChatLLM) -> LanguageFunction:
         """
         Load an agent from a YAML file.
 
@@ -55,4 +55,4 @@ class LanguageFunction:
             Agent: The agent.
         """
         yaml_obj = load_yaml_file(filepath)
-        return cls(yaml_obj)
+        return cls(yaml_obj, llm)

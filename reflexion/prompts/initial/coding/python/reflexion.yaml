@@ -1,4 +1,4 @@
-system_message: |
+instruction: |
   You are an AI Python assistant.
   You will be given your previous implementation of a function, a series of unit tests results, and your self-reflection on your previous implementation.
   Write your full implementation (restate the function signature).
@@ -13,7 +13,7 @@ input_template: |
   [reflection on previous impl]:
   {reflection}
 
-few_shot_prompt:
+examples:
   - role: "user"
     content: |
       [previous impl]:

@@ -1,4 +1,4 @@
-system_message: |
+instruction: |
 You are a Python programming assistant.
 You will be given a function implementation and a series of unit test results.
 Your goal is to write a few sentences to explain why your implementation is wrong as indicated by the tests. You will need this as guidance when you try again later. Only provide the few sentence description in your answer, not the implementation."
@@ -10,7 +10,7 @@ input_template: |
   [unit test results]:
   {unit_test_results}
 
-few_shot_prompt:
+examples:
   - role: "user"
     content: |
       [function impl]:

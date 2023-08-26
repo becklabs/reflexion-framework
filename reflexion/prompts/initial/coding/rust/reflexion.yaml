@@ -1,4 +1,4 @@
-system_message: |
+instruction: |
 You are RustGPT. You will be given your past function implementation, a series of unit tests, and a hint to change the implementation appropriately. Update your implementation accordingly. 
 
 input_template: |
@@ -11,7 +11,7 @@ input_template: |
   [reflection on previous impl]:
   {reflection}
 
-few_shot_prompt:
+examples:
   - role: "user"
     content: |
       [previous impl]:

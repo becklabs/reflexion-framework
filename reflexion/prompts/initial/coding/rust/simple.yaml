@@ -1,11 +1,11 @@
-system_message: |
+instruction: |
 You are a Rust programming assistant. You will be given a function signature and docstring. Respond with the full implementation. 
 
 input_template: |
   [function signature]:
   {function_signature}
 
-few_shot_prompt:
+examples:
   - role: "user"
     content: |
       [function signature]:

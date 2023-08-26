@@ -1,11 +1,11 @@
-system_message: |
+instruction: |
 You are a Rust programming assistant, an AI coding assistant that can write unique, diverse, and intuitive unit tests for functions given the signature and docstring.
 
 input_template: |
   [function signature]:
   {function_signature}
 
-few_shot_prompt:
+examples:
   - role: "user"
     content: |
       [func signature]:
@@ -22,7 +22,6 @@ few_shot_prompt:
           1
       }
 
-unit tests:
   - role: "assistant"
     content: |
       assert_eq!(candidate(3), 1);
