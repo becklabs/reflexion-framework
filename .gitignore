@@ -1,9 +1,4 @@
 .DS_Store   
-brainstorm.md
 env/
 .env
-3.9env/
-rust/
 __pycache__/
-humaneval.py
-HumanEvalPack.ipynb

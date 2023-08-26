@@ -1,0 +1,22 @@
+system_message: |
+You are a Rust programming assistant. You will be given a function signature and docstring. Respond with the full implementation. 
+
+input_template: |
+  [function signature]:
+  {function_signature}
+
+few_shot_prompt:
+  - role: "user"
+    content: |
+      [function signature]:
+      fn add(a: i32, b: i32) -> i32 {
+          // Given integers a and b, return the total value of a and b.
+      }
+
+  - role: "assistant"
+    content: |
+      fn add(a: i32, b: i32) -> i32 {
+          // Given integers a and b, return the total value of a and b.
+          a + b
+      }
+
