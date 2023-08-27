@@ -45,7 +45,7 @@ class LanguageFunction:
         chat_string = get_buffer_string(
             [self.system_message, *self.few_shot_prompt, message, response]
         )
-        logging.debug(f"Language Function thread:\n{chat_string}")
+        logging.info(f"Language Function thread:\n{chat_string}")
         return response.content
 
     @classmethod

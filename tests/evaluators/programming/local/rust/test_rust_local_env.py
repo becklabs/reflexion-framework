@@ -37,8 +37,9 @@ tests = ['assert_eq!(has_close_elements(vec![11.0, 2.0, 3.9, 4.0, 5.0, 2.2], 0.3
 'assert_eq!(has_close_elements(vec![1.1, 2.2, 3.1, 4.1, 5.1], 1.0), true);',
 'assert!(has_close_elements(vec![1.1, 2.2, 3.1, 4.1, 5.1], 0.5) == false);']
 
-if __name__ == "__main__":
-    reward, result = env.step(program, tests)
 
-    print(reward)
-    print(result)
+def test_step():
+    reward, messages = env.step(program, tests)
+    assert reward == (True, False, True, False, True, True, False)
+    assert messages == ('passed', 'failed: execution error: true != false', 'passed', 'failed: execution error: true != false', 'passed', 'passed', 'failed: execution error: assertion failed')
+

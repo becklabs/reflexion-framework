@@ -1,19 +1,25 @@
 from abc import ABC, abstractmethod
-from typing import List, Tuple
+from typing import List, Tuple, Optional
+from collections import deque
+
 
 class ReflexionAgent(ABC):
     """
-    Text-based Reflexion Agent 
+    Text-based Reflexion Agent
     """
+
     def __init__(
         self,
         window_size: int = 1,
     ) -> None:
+        """
+        Initialize a Reflexion Agent with a given window size for reflections
+        """
         self.steps = 0
         self.window_size = window_size
         self.__actions = []
         self.__feedbacks = []
-        self.__reflections = []
+        self.__reflections = deque(maxlen=window_size)
 
     @abstractmethod
     def reflect(self, action: str, feedback: str) -> str:
@@ -21,14 +27,19 @@ class ReflexionAgent(ABC):
         Return a reflection on the previous step
         """
         ...
-    
+
     @abstractmethod
-    def act(self, reflections: List[str]) -> str:
+    def act(
+        self,
+        reflections: List[str],
+        last_action: Optional[str] = None,
+        last_feedback: Optional[str] = None,
+    ) -> str:
         """
-        Return an action based on a list of reflections
+        Return an action based on a list of reflections, and optionally the previous action and feedback
         """
         ...
-    
+
     @abstractmethod
     def evaluate(self, action: str) -> Tuple[bool, str]:
         """
@@ -52,9 +63,17 @@ class ReflexionAgent(ABC):
             message (str): The message received from the environment for the action.
         """
         if self.steps > 0:
-            self.__reflections.append(self.reflect(self.__actions[-1], self.__feedbacks[-1]))
+            self.__reflections.append(
+                self.reflect(
+                    action=self.__actions[-1], feedback=self.__feedbacks[-1]
+                )
+            )
 
-        action = self.act(self.__reflections[max(0, self.steps - self.window_size) : self.steps]) 
+        action = self.act(
+            reflections=list(self.__reflections),
+            last_action=self.__actions[-1] if self.steps > 0 else None,
+            last_feedback=self.__feedbacks[-1] if self.steps > 0 else None,
+        )
 
         reward, message = self.evaluate(action)
 

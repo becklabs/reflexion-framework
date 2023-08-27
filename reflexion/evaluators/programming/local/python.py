@@ -35,7 +35,7 @@ class LocalPythonTestingEnv(LocalTestingEnv):
     def __init__(self, directory: str = os.getcwd(), timeout: int = 10):
         super().__init__(directory, timeout)
 
-    def _unsafe_execute(self, program: str, test: str, result: Queue) -> bool:
+    def _unsafe_execute(self, program: str, test: str, result: Queue) -> None:
         program = "\n".join(IMPORTS) + "\n" + program + "\n" + test
         try:
             exec_globals = {}
@@ -51,7 +51,7 @@ class LocalPythonTestingEnv(LocalTestingEnv):
                 actual_value = eval(func_call, exec_globals)
             except Exception as e:
                 actual_value = f"Error when rerunning function call: {e}"
-            result.put(f"AssertionError, actual value was: {actual_value}")
+            result.put(f"AssertionError, actual left-hand value was: {actual_value}")
 
         except Exception as e:
             print(type(e))
@@ -73,10 +73,9 @@ def get_func_call(assert_statement: str) -> str:
         call = test_expr
     elif isinstance(test_expr, ast.UnaryOp) and isinstance(test_expr.op, ast.Not):
         call = test_expr.operand
-    elif isinstance(test_expr, ast.Compare) and len(test_expr.ops) == 1 and isinstance(test_expr.ops[0], ast.Eq):
+    elif isinstance(test_expr, ast.Compare) and len(test_expr.ops) == 1:
         call = test_expr.left
     else:
-        raise ValueError("Unsupported assert statement format.")
+        raise ValueError(f"Unsupported assert statement format. {test_expr}")
     
     return ast.unparse(call)    
-    

@@ -2,6 +2,7 @@ from reflexion.evaluators.programming import LocalPythonTestingEnv
 
 env = LocalPythonTestingEnv(timeout=10)
 
+
 program = ''' 
 def has_close_elements(numbers: List[float], threshold: float) -> bool:
     """
@@ -30,8 +31,8 @@ tests = ["assert has_close_elements([1.0, 2.0, 3.9, 4.0, 5.0, 2.2], 0.3) == True
     "assert has_close_elements([1.1, 2.2, 3.1, 4.1, 5.1], 1.0) == True",
     "assert has_close_elements([1.1, 2.2, 3.1, 4.1, 5.1], 0.5) == False"]
 
-if __name__ == "__main__":
-    reward, result = env.step(program, tests)
+reward, result = env.step(program, tests)
 
-    print(reward)
-    print(result)
+def test_step():
+    assert reward == (True, False, True, False, True, True, False)
+    assert result == ("passed", "AssertionError, actual left-hand value was: True", "passed", "AssertionError, actual left-hand value was: True", "passed", "passed", "AssertionError, actual left-hand value was: True")
