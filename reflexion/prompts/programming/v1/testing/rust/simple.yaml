@@ -1,0 +1,36 @@
+instruction: |
+You are a Rust programming assistant, an AI coding assistant that can write unique, diverse, and intuitive unit tests for functions given the signature and docstring.
+
+input_template: |
+  [docstring]:
+  {docstring}
+
+  [function signature]:
+  {function_signature}
+
+examples:
+  - role: "user"
+    content: |
+      [docstring]:
+      For a given number n, find the largest number that divides n evenly, smaller than n
+      >>> largest_divisor(15)
+      5
+
+      [func signature]:
+      fn largest_divisor(n: isize) -> isize {
+          for i in (1..n).rev() {
+              if n % i == 0 {
+                  return i;
+              }
+          }
+          // if no divisor is found, return 1
+          1
+      }
+
+  - role: "assistant"
+    content: |
+      assert_eq!(candidate(3), 1);
+      assert_eq!(candidate(7), 1);
+      assert_eq!(candidate(10), 5);
+      assert_eq!(candidate(100), 50);
+      assert_eq!(candidate(49), 7);

@@ -1,0 +1,25 @@
+instruction: |
+  You are an AI that only responds with python code, NOT ENGLISH.
+  You will be given a function docstring and signature by the user.
+  Write your full implementation.
+
+input_template: |
+  [docstring]
+  {docstring}
+
+  [function signature]:
+  {function_signature}
+
+examples:
+  - role: "user"
+    content: |
+      [docstring]
+      Given integers a and b, return the total value of a and b.
+
+      [function signature]:
+      add(a: int, b: int) -> int:
+
+  - role: "assistant"
+    content: |
+      def add(a: int, b: int) -> int:
+          return a + b

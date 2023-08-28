@@ -1,0 +1,61 @@
+instruction: |
+  You are a Rust programming assistant.
+  You will be given:
+  1. A function docstring
+  2. An implementation of this function
+  3. A series of unit tests results for this function
+  Your goal is to write a few sentences to explain why your implementation is wrong as indicated by the tests. You will need this as guidance when you try again later. Only provide the few sentence description in your answer, not the implementation."
+
+input_template: |
+  [docstring]:
+  {docstring}
+
+  [function impl]:
+  {previous_impl}
+
+  [unit test results]:
+  {unit_test_results}
+
+examples:
+  - role: "user"
+    content: |
+      [docstring]:
+      Given an array of strings strs, group the anagrams together. You can return the answer in any order.
+      An Anagram is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.
+
+      [function impl]:
+      pub fn group_anagrams(strs: Vec<String>) -> Vec<Vec<String>> {
+        use std::collections::HashMap;
+        let mut map: HashMap<[u8;26], Vec<String>> = HashMap::with_capacity(strs.len());
+        let offset = 'a' as usize;
+
+        for str in strs.into_iter() {
+          let mut chars: [u8; 26] = [0; 26];
+
+          for char in str.chars() {
+            chars[char.to_ascii_lowercase() as usize - offset] += 1;
+          }
+
+          map.entry(str.len())
+            .and_modify(|v| v.push(str.clone()))
+            .or_insert(vec![str]);
+        }
+        
+        let mut arr: Vec<Vec<String>> = Vec::new();
+        for v in map.into_values() {
+          arr.push(v);
+        }
+        arr
+      }
+
+      [unit test results]:
+      Tested passed:
+      assert_eq!(func(vec![""]), vec![vec![""]]);
+      assert_eq!(func(vec!["a"]), vec![vec!["a"]]);
+
+      Tests failed:
+      assert_eq!(func(vec!["eat", "tea", "tan", "ate", "nat", "bat"]), vec![vec!["bat"], vec!["nat", "tan"], vec!["ate", "eat", "tea"]]); # output:  [["bat", "tan", "nat"], ["eat", "tea", "ate"]]
+  
+  - role: "assistant"
+    content: |
+      The implementation failed to group the anagrams together correctly. Instead, it grouped words by their length, which is not the intended behavior. The issue lies in using the length of the input strings (str.len()) as the key for the hashmap, rather than the count of each character in the strings (chars). To overcome this error, I should change the hashmap key to the character count array (chars). This will ensure that words with the same character counts (anagrams) are grouped together, which is the desired output. Next time I approach the problem, I will make sure to use the correct hashmap key to group the anagrams.

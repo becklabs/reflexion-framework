@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import List, Tuple, Optional
 from collections import deque
+from typing import List, Optional, Tuple
 
 
 class ReflexionAgent(ABC):
@@ -64,9 +64,7 @@ class ReflexionAgent(ABC):
         """
         if self.steps > 0:
             self.__reflections.append(
-                self.reflect(
-                    action=self.__actions[-1], feedback=self.__feedbacks[-1]
-                )
+                self.reflect(action=self.__actions[-1], feedback=self.__feedbacks[-1])
             )
 
         action = self.act(

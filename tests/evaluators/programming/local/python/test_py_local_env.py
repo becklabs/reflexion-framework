@@ -1,4 +1,4 @@
-from reflexion.evaluators.programming import LocalPythonTestingEnv
+from reflexion.environments.programming import LocalPythonTestingEnv
 
 env = LocalPythonTestingEnv(timeout=10)
 

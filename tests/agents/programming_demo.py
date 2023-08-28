@@ -6,35 +6,24 @@ from reflexion.actors import LanguageFunction
 
 from reflexion.environments.programming import InternalTestingEnv
 from reflexion.environments.programming import LocalPythonTestingEnv
-from reflexion.llms import MockLLM
+from reflexion.llms import OpenAIChatLLM, MockLLM
+from langchain.callbacks import get_openai_callback
 
 import logging
 logging.basicConfig(level=logging.INFO)
 
+function_signature = "def separate_paren_groups(paren_string: str) -> List[str]:"
 
-function_signature = "def reverse_words(s: str) -> str"
-docstring = "Reverse each word in a string"
-
-buggy_solution = """
-def reverse_words(s: str) -> str:
-    return s[::-1]
+docstring = """
+Input to this function is a string containing multiple groups of nested parentheses. Your goal is to
+separate those group into separate strings and return the list of those.
+Separate groups are balanced (each open brace is properly closed) and not nested within each other
+Ignore any spaces in the input string.
+>>> separate_paren_groups('( ) (( )) (( )( ))')
+['()', '(())', '(()())']
 """
 
-solution = """
-def reverse_words(s: str) -> str:
-    return ' '.join(word[::-1] for word in s.split())
-"""
-
-reflection = "Need to reverse each word independently instead of the whole string."
-
-tests = """
-Tests:
-assert reverse_words("Hello World") == "olleH dlroW"  # This test will fail.
-assert reverse_words("This is a test") == "sihT si a tset"
-assert reverse_words("abc") == "cba"
-"""
-
-llm = MockLLM(responses =[buggy_solution, tests, reflection, solution])
+llm = OpenAIChatLLM(model_name="gpt-4", temperature=0, max_tokens=1000)
 
 # PROMPTS
 simple_implementation_function = LanguageFunction.from_yaml(
@@ -73,16 +62,24 @@ local_env = LocalPythonTestingEnv(timeout=10)
 agent = ProgrammingReflexionAgent(
     function_signature=function_signature,
     docstring=docstring,
-    testing_env=InternalTestingEnv(function_signature, docstring, "python", local_env, llm),
+    testing_env=InternalTestingEnv(
+        function_signature=function_signature,
+        docstring=docstring,
+         language="python", local_env=local_env, llm=llm
+    ),
     simple_implemenation_function=simple_implementation_function,
     implementation_function=implementation_function,
     reflection_function=reflexion_function,
 )
-def test_step():
+
+with get_openai_callback() as cb:
     reward, message = agent.step()
-    assert reward == False
+    print(reward)
+    print(message)
+print("Total cost", cb.total_cost)
 
+with get_openai_callback() as cb:
     reward, message = agent.step()
-    assert reward == True
-
-
+    print(reward)
+    print(message)
+print("Total cost", cb.total_cost)

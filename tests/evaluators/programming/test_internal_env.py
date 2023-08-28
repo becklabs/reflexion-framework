@@ -1,7 +1,7 @@
 from reflexion.prompts import PROMPTS_DIR
 
-from reflexion.evaluators.programming import InternalTestingEnv
-from reflexion.evaluators.programming import LocalPythonTestingEnv
+from reflexion.environments.programming import InternalTestingEnv
+from reflexion.environments.programming import LocalPythonTestingEnv
 from reflexion.llms import OpenAIChatLLM, MockLLM
 
 import dotenv
@@ -12,12 +12,8 @@ import logging
 
 logging.basicConfig(level=logging.INFO)
 
-problem = '''
-def reverse_words(s: str) -> str:
-    """
-    Input to this function is a string containing multiple words. Your goal is to reverse the order of the words.
-    """
-'''
+function_signature = "reverse_words(s: str) -> str:"
+docstring = "Input to this function is a string containing multiple words. Your goal is to reverse the order of the words."
 
 solution = """
 def reverse_words(s: str) -> str:
@@ -35,7 +31,7 @@ llm = MockLLM(responses =[tests])
 
 local_env = LocalPythonTestingEnv()
 internal_env = InternalTestingEnv(
-    problem=problem, language="python", local_env=local_env, llm=llm
+    function_signature=function_signature, docstring=docstring, language="python", local_env=local_env, llm=llm
 )
 
 rewards, messages = internal_env.step(solution)

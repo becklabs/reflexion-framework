@@ -1,5 +1,5 @@
 import pytest
-from reflexion.evaluators.programming.local.python import get_func_call
+from reflexion.environments.programming.local.python import get_func_call
 
 def test_nested():
     assert_statement = 'assert abs(truncate_number(123.456) - 0.456) < 1e-6'
