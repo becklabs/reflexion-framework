@@ -1,7 +1,7 @@
 from reflexion.prompts import PROMPTS_DIR
 
 from reflexion.environments.programming import InternalTestingEnv
-from reflexion.environments.programming import LocalPythonTestingEnv
+from reflexion.environments.programming import PythonTestingEnv
 from reflexion.llms import OpenAIChatLLM, MockLLM
 
 import dotenv
@@ -29,7 +29,7 @@ assert reverse_words("abc") == "cba"
 
 llm = MockLLM(responses =[tests])
 
-local_env = LocalPythonTestingEnv()
+local_env = PythonTestingEnv()
 internal_env = InternalTestingEnv(
     function_signature=function_signature, docstring=docstring, language="python", local_env=local_env, llm=llm
 )

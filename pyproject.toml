@@ -15,8 +15,9 @@ datasets = "2.14.4"
 python-dotenv = "1.0.0"
 langchain = "0.0.268"
 pandas = "1.5.3"
-openai = "0.27.8
+openai = "0.27.8"
 termcolor = "2.3.0"
+PyYAML = "6.0.1"
 
 
 [build-system]

@@ -31,7 +31,7 @@ class LeetCodeTestingEnv(TestingEnv):
     ) -> Tuple[List[bool], List[str]]:
         submission = LeetCodeSubmission(
             code=self.formatter.to_leetcode(program),
-            language=self.language,
+            lang=self.language,
             question_slug=metadata["question_slug"],
             timeout=self.timeout,
         )

@@ -1,11 +1,11 @@
-from .local.python import LocalPythonTestingEnv
-from .local.rust import LocalRustTestingEnv
+from .local.python import PythonTestingEnv
+from .local.rust import RustTestingEnv
 from .leetcode import LeetCodeTestingEnv
 from .internal import InternalTestingEnv
 
 __all__ = [
-    "LocalPythonTestingEnv",
-    "LocalRustTestingEnv",
+    "PythonTestingEnv",
+    "RustTestingEnv",
     "LeetCodeTestingEnv",
     "InternalTestingEnv",
 ]

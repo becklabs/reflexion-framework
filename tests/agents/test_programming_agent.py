@@ -5,7 +5,7 @@ from reflexion.prompts import PROMPTS_DIR
 from reflexion.actors import LanguageFunction
 
 from reflexion.environments.programming import InternalTestingEnv
-from reflexion.environments.programming import LocalPythonTestingEnv
+from reflexion.environments.programming import PythonTestingEnv
 from reflexion.llms import MockLLM
 
 import logging
@@ -68,7 +68,7 @@ reflexion_function = LanguageFunction.from_yaml(
     llm=llm,
 )
 
-local_env = LocalPythonTestingEnv(timeout=10)
+local_env = PythonTestingEnv(timeout=10)
 
 agent = ProgrammingReflexionAgent(
     function_signature=function_signature,

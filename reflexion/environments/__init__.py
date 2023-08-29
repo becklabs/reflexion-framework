@@ -1,2 +1,2 @@
 from .programming import (InternalTestingEnv, LeetCodeTestingEnv,
-                          LocalPythonTestingEnv, LocalRustTestingEnv)
+                          PythonTestingEnv, RustTestingEnv)

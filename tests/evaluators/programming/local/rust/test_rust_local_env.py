@@ -1,6 +1,6 @@
-from reflexion.environments.programming import LocalRustTestingEnv
+from reflexion.environments.programming import RustTestingEnv
 
-env = LocalRustTestingEnv(timeout=30)
+env = RustTestingEnv(timeout=30)
 
 program = """
 /*

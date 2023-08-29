@@ -28,7 +28,7 @@ IMPORTS = [
 ]
 
 
-class LocalPythonTestingEnv(LocalTestingEnv):
+class PythonTestingEnv(LocalTestingEnv):
     """
     Local Testing environment for Python programs.
     """
@@ -55,7 +55,6 @@ class LocalPythonTestingEnv(LocalTestingEnv):
             result.put(f"AssertionError, actual left-hand value was: {actual_value}")
 
         except Exception as e:
-            print(type(e))
             result.put(f"Failed: {e}")
 
 

@@ -50,7 +50,7 @@ mod tests {
 
 
 
-class LocalRustTestingEnv(LocalTestingEnv):
+class RustTestingEnv(LocalTestingEnv):
     """
     Local Testing environment for Rust programs. 
     """
