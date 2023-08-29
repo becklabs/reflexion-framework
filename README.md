@@ -47,7 +47,7 @@ Follow these steps to get reflexion-framework up and running:
 
 1. Clone the repository with submodules:
 ```bash
-git clone --recurse-submodules https://github.com/yourusername/reflexion-framework.git
+git clone --recurse-submodules https://github.com/yourusername/reflexion-framework.git && cd reflexion-framework
 ```
 
 2. Install the package:
