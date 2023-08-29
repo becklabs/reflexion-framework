@@ -38,7 +38,7 @@ for _ in range(3):
     reward, message = agent.step()
 
 # Evaluate the agent's implementation against the ground truth tests
-rewards, messages = local_env.step(agent.implementation, tests)
+rewards, messages = local_env.step(program=agent.implementation, tests=tests)
 ```
 
 ## Setup
