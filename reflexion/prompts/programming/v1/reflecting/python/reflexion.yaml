@@ -1,10 +1,10 @@
 instruction: |
-  You are a Python programming assistant.
+  You are an advanced Python programming agent.
   You will be given:
   1. A function docstring
   2. An implementation of this function
   3. A series of unit tests results for this function
-  Your goal is to write a few sentences to explain why your implementation is wrong as indicated by the tests. You will need this as guidance when you try again later. Only provide the few sentence description in your answer, not the implementation."
+  Write a few sentences to explain why your implementation is wrong as indicated by the tests, and what specifically can be done to overcome the error. You will need this as guidance when you try again later."
 
 input_template: |
   [docstring]
@@ -20,81 +20,75 @@ examples:
   - role: "user"
     content: |
       [docstring]
-      Given a list of integers nums and an integer target, write a function that returns the longest contiguous subarray of nums with a sum less than or equal to target.
-      If there is no subarray with sum less than or equal to target, return an empty list.
+      Consider a matrix `M` with dimensions `width * height`, such that every cell
+      has value `0` or `1`, and any square sub-matrix of `M` of size `sideLength *
+      sideLength` has at most `maxOnes` ones.
+
+      Return the maximum possible number of ones that the matrix `M` can have.
+
+      Example 1:
+
+      Input: width = 3, height = 3, sideLength = 2, maxOnes = 1
+      Output: 4
+      Explanation:
+      In a 3*3 matrix, no 2*2 sub-matrix can have more than 1 one.
+      The best solution that has 4 ones is:
+      [1,0,1]
+      [0,0,0]
+      [1,0,1]
+
+      Example 2:
+
+      Input: width = 3, height = 3, sideLength = 2, maxOnes = 2
+      Output: 6
+      Explanation:
+      [1,0,1]
+      [1,0,1]
+      [1,0,1]
+
+      Constraints:
+
+      * `1 <= width, height <= 100`
+      * `1 <= sideLength <= width, height`
+      * `0 <= maxOnes <= sideLength * sideLength` 
 
       [function impl]:
-      def longest_subarray_with_sum_limit(nums: List[int], target: int) -> List[int]:
-          n = len(nums)
-          left, right = 0, 0
-          max_length = 0
-          current_sum = 0
-          result = []
-          while right < n:
-              current_sum += nums[right]
-              while current_sum > target:
-                  current_sum -= nums[left]
-                  left += 1
-              if right - left + 1 >= max_length:
-                  max_length = right - left + 1
-                  result = nums[left:right+1]
-              right += 1
-          return result
+      def maximum_number_of_ones(width, height, sideLength, maxOnes):
+          R = min(width, height)
+          C = max(width, height)
+
+          fullR = R // sideLength
+          fullC = C // sideLength
+
+          total = fullR * fullC * maxOnes
+          double_overlap = (R % sideLength) * (C % sideLength)
+
+          if maxOnes <= double_overlap:
+              total += (fullR + fullC + 1) * maxOnes
+          else:
+              total += (fullR + fullC + 1) * double_overlap
+              ones_leftover = maxOnes - double_overlap 
+
+              bottom_space = sideLength * (R % sideLength) - double_overlap
+              put_to_bottom = min(bottom_space, ones_leftover)
+              total += put_to_bottom * fullC
+
+              ones_leftover -= put_to_bottom
+              total += ones_leftover * fullR
+
+          return total
 
       [unit test results]:
-      Tests passing:
-      assert longest_subarray_with_sum_limit([1, 2, 3, 4, 5], 8) == [1, 2, 3]
-      assert longest_subarray_with_sum_limit([1, 2, 3, 4, 5], 15) == [1, 2, 3, 4, 5]
-      assert longest_subarray_with_sum_limit([1, -1, 2, -2, 3, -3], 2) == [1, -1, 2, -2, 3]
-      assert longest_subarray_with_sum_limit([], 10) == []
-      assert longest_subarray_with_sum_limit([], 0) == []
-      assert longest_subarray_with_sum_limit([], -5) == []  
+      Tests passed: 
+      assert maximum_number_of_ones(1, 1, 1, 0) == 0
+      assert maximum_number_of_ones(3, 3, 2, 2) == 6
+      assert maximum_number_of_ones(5, 6, 3, 3) == 12
 
-      Tests failing:
-      assert longest_subarray_with_sum_limit([5, 6, 7, 8, 9], 4) == [] # output: [5]
+      Tests failed: 
+      assert maximum_number_of_ones(74, 52, 10, 77) == 3043
+      Message: Assertion error, actual left-hand value was 3168
   
   - role: "assistant"
     content: |
-      The implementation failed the where no subarray fulfills the condition. The issue in the implementation is due to the use of >= instead of > in the condition to update the result. Because of this, it returns a subarray even when the sum is greater than the target, as it still updates the result when the current subarray length is equal to the previous longest subarray length. To overcome this error, we should change the condition to only update the result when the current subarray length is strictly greater than the previous longest subarray length. This can be done by replacing >= with > in the condition.
+      The implementation failed on the test case with width=74, height=52, sideLength=10, and maxOnes=77, yielding a result of 3168 instead of the expected 3043. The flaw in the initial solution stems from not accounting for the ones that can be placed on the right-most column after placing them in the bottom row. Specifically, once the maxOnes exceed the double overlap, the solution places the leftover ones only at the bottom rows, neglecting the available spaces on the right-most columns. As a result, the code often overestimates the total count of ones. To rectify this error, an additional step should be introduced to accommodate the remaining ones on the right side of the matrix after first accommodating them at the bottom. This can be done by determining the available space on the right-most columns and placing the ones accordingly, ensuring the maximum placement of ones is achieved across both dimensions.
   
-  - role: "user"
-    content: |
-      [docstring]
-      Given a list of integers nums and an integer target, write a function that returns the longest contiguous subarray of nums with a sum less than or equal to target.
-      If there is no subarray with sum less than or equal to target, return an empty list.
-
-      [function impl]:
-      def longest_subarray_with_sum_limit(nums: List[int], target: int) -> List[int]:
-          n = len(nums)
-          left, right = 0, 0
-          max_length = 0
-          current_sum = 0
-          result = []
-          while current_sum + nums[right] <= target:
-              current_sum += nums[right]
-              right += 1
-          while right < n:
-              current_sum += nums[right]
-              while current_sum > target:
-                  current_sum -= nums[left]
-                  left += 1
-              if right - left + 1 > max_length:
-                  max_length = right - left + 1
-                  result = nums[left:right+1]
-              right += 1
-          return result
-
-      [unit test results]:
-      Tests passing:
-      assert longest_subarray_with_sum_limit([], 10) == []
-      assert longest_subarray_with_sum_limit([], 0) == []
-      assert longest_subarray_with_sum_limit([], -5) == []
-      Tests failing:
-      assert longest_subarray_with_sum_limit([1, 2, 3, 4, 5], 8) == [1, 2, 3] # output: list index out of range
-      assert longest_subarray_with_sum_limit([1, 2, 3, 4, 5], 15) == [1, 2, 3, 4, 5] # output: list index out of range
-      assert longest_subarray_with_sum_limit([5, 6, 7, 8, 9], 4) == [] # output: list index out of range
-      assert longest_subarray_with_sum_limit([1, -1, 2, -2, 3, -3], 2) == [1, -1, 2, -2, 3] # output: list index out of range
-  
-  - role: "assistant"
-    content: |
-      The implementation failed 4 out of the 7 test cases due to an IndexError. The issue stems from the while loop while current_sum + nums[right] <= target:, which directly accesses nums[right] without checking if right is within the bounds of the list. This results in a runtime error when right goes beyond the list length. To overcome this error, we need to add a bounds check for the right variable in the mentioned while loop. We can modify the loop condition to while right < len(nums) and current_sum + nums[right] <= target:. This change will ensure that we only access elements within the bounds of the list, thus avoiding the IndexError.

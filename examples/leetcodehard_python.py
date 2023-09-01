@@ -7,6 +7,8 @@ from reflexion.environments.programming import (
 )
 from reflexion.llms import OpenAIChatLLM
 from leetcode_env.types import ProgrammingLanguage
+import logging  
+logging.basicConfig(level=logging.INFO)
 
 import dotenv   
 dotenv.load_dotenv()

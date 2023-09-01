@@ -1,12 +1,12 @@
 instruction: |
-  You are an AI Python assistant.
+  You are an advanced AI Python programming agent.
   You will be given:
   1. A function docstring.
   2. Your previous implementation of this function.
   3. A series of unit tests results for this function.
   4. Your self-reflection on your previous implementation.
 
-  Write your full, updated implementation (restate the function signature).
+  Use the self-reflection to improve upon your previous implementation. Your goal is to pass all unit tests.
 
 input_template: |
   [docstring]
@@ -25,23 +25,103 @@ examples:
   - role: "user"
     content: |
       [docstring]
-      Given integers a and b, return the total value of a and b.
+      Consider a matrix `M` with dimensions `width * height`, such that every cell
+      has value `0` or `1`, and any square sub-matrix of `M` of size `sideLength *
+      sideLength` has at most `maxOnes` ones.
+
+      Return the maximum possible number of ones that the matrix `M` can have.
+
+      Example 1:
+
+      Input: width = 3, height = 3, sideLength = 2, maxOnes = 1
+      Output: 4
+      Explanation:
+      In a 3*3 matrix, no 2*2 sub-matrix can have more than 1 one.
+      The best solution that has 4 ones is:
+      [1,0,1]
+      [0,0,0]
+      [1,0,1]
+
+      Example 2:
+
+      Input: width = 3, height = 3, sideLength = 2, maxOnes = 2
+      Output: 6
+      Explanation:
+      [1,0,1]
+      [1,0,1]
+      [1,0,1]
+
+      Constraints:
+
+      * `1 <= width, height <= 100`
+      * `1 <= sideLength <= width, height`
+      * `0 <= maxOnes <= sideLength * sideLength` 
 
       [previous impl]:
-      def add(a: int, b: int) -> int:
-          return a - b
+      def maximum_number_of_ones(width, height, sideLength, maxOnes):
+          R = min(width, height)
+          C = max(width, height)
+
+          fullR = R // sideLength
+          fullC = C // sideLength
+
+          total = fullR * fullC * maxOnes
+          double_overlap = (R % sideLength) * (C % sideLength)
+
+          if maxOnes <= double_overlap:
+              total += (fullR + fullC + 1) * maxOnes
+          else:
+              total += (fullR + fullC + 1) * double_overlap
+              ones_leftover = maxOnes - double_overlap 
+
+              bottom_space = sideLength * (R % sideLength) - double_overlap
+              put_to_bottom = min(bottom_space, ones_leftover)
+              total += put_to_bottom * fullC
+
+              ones_leftover -= put_to_bottom
+              total += ones_leftover * fullR
+
+          return total
 
       [unit test results from previous impl]:
-      Tested passed:
+      Tests passed: 
+      assert maximum_number_of_ones(1, 1, 1, 0) == 0
+      assert maximum_number_of_ones(3, 3, 2, 2) == 6
+      assert maximum_number_of_ones(5, 6, 3, 3) == 12
 
-      Tests failed:
-      assert add(1, 2) == 3 # output: -1
-      assert add(1, 2) == 4 # output: -1
+      Tests failed: 
+      assert maximum_number_of_ones(74, 52, 10, 77) == 3043
+      Message: Assertion error, actual left-hand value was 3168
 
       [reflection on previous impl]:
-      The implementation failed the test cases where the input integers are 1 and 2. The issue arises because the code does not add the two integers together, but instead subtracts the second integer from the first. To fix this issue, we should change the operator from `-` to `+` in the return statement. This will ensure that the function returns the correct output for the given input.
+      The implementation failed on the test case with width=74, height=52, sideLength=10, and maxOnes=77, yielding a result of 3168 instead of the expected 3043. The flaw in the initial solution stems from not accounting for the ones that can be placed on the right-most column after placing them in the bottom row. Specifically, once the maxOnes exceed the double overlap, the solution places the leftover ones only at the bottom rows, neglecting the available spaces on the right-most columns. As a result, the code often overestimates the total count of ones. To rectify this error, an additional step should be introduced to accommodate the remaining ones on the right side of the matrix after first accommodating them at the bottom. This can be done by determining the available space on the right-most columns and placing the ones accordingly, ensuring the maximum placement of ones is achieved across both dimensions.
   
   - role: "assistant"
     content: |
-      def add(a: int, b: int) -> int:
-          return a + b
+      def maximum_number_of_ones(width, height, sideLength, maxOnes):
+          R = min(width, height)
+          C = max(width, height)
+
+          fullR = R // sideLength
+          fullC = C // sideLength
+
+          total = fullR * fullC * maxOnes
+          double_overlap = (R % sideLength) * (C % sideLength)
+
+          if maxOnes <= double_overlap:
+              total += (fullR + fullC + 1) * maxOnes
+          else:
+              total += (fullR + fullC + 1) * double_overlap
+              ones_leftover = maxOnes - double_overlap 
+
+              bottom_space = sideLength * (R % sideLength) - double_overlap
+              put_to_bottom = min(bottom_space, ones_leftover)
+              total += put_to_bottom * fullC
+              ones_leftover -= put_to_bottom
+
+              right_space = sideLength * (C % sideLength) - double_overlap
+              put_to_right = min(right_space, ones_leftover)
+
+              total += put_to_right * fullR
+
+          return total

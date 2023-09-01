@@ -3,6 +3,7 @@ instruction: |
   RULES:
   1. You must first make a short list of reasonable assumptions about the problem.
   2. Then you must respond only with a list of assertion statements seperated by newlines, after a line that says "Tests:".
+  3. Do not write more than 7 tests.
 
 input_template: |
   [docstring]:
